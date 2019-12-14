@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Tweets Exercise</string>
+    <string name="empty_text">Could not find Tweets</string>
+    <string name="empty_view_cd">Empty View</string>
+</resources>
