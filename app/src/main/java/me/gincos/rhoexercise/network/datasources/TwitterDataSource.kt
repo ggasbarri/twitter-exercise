@@ -6,10 +6,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import me.gincos.rhoexercise.network.FetchingState
 import me.gincos.rhoexercise.network.RetrofitClient
 import io.reactivex.schedulers.Schedulers
-import me.gincos.rhoexercise.network.responses.Status
 import com.squareup.moshi.Moshi
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import me.gincos.rhoexercise.network.responses.Status
 import java.io.IOException
 import okio.BufferedSource
 
@@ -20,9 +20,16 @@ class TwitterDataSource(private val retrofitClient: RetrofitClient) {
     private val jsonAdapter = moshi.adapter<Status>(Status::class.java)
     val fetchingState = MutableLiveData<FetchingState>(FetchingState.Idle)
 
+    private var currentDisposable: Disposable? = null
+
     fun getStatus(consumer: Consumer<Status>, track: String): Disposable {
         fetchingState.postValue(FetchingState.Fetching)
-        return retrofitClient.apiService.statusFilter(track)
+
+        if(currentDisposable != null){
+            currentDisposable?.dispose()
+        }
+
+        currentDisposable = retrofitClient.apiService.statusFilter(track)
             .subscribeOn(Schedulers.io())
             .flatMap {
                 statuses(it.source())
@@ -30,6 +37,7 @@ class TwitterDataSource(private val retrofitClient: RetrofitClient) {
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext(Observable.empty())
             .subscribe(consumer)
+        return currentDisposable as Disposable
     }
 
     private fun statuses(source: BufferedSource): Observable<Status> {
