@@ -2,4 +2,9 @@
     <string name="app_name">Tweets Exercise</string>
     <string name="empty_text">Could not find Tweets</string>
     <string name="empty_view_cd">Empty View</string>
+    <string name="unknown_user">Unknown user</string>
+    <string name="empty_query">Query cannot be empty</string>
+    <string name="dialog_title">Search for Tweets</string>
+    <string name="dialog_message">Please write the term you seek</string>
+    <string name="dialog_positive">Go</string>
 </resources>

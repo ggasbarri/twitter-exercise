@@ -1,15 +1,13 @@
 package me.gincos.rhoexercise.network
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import me.gincos.rhoexercise.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import se.akerfeldt.okhttp.signpost.SigningInterceptor
 import se.akerfeldt.okhttp.signpost.OkHttpOAuthConsumer
+import java.util.concurrent.TimeUnit
 
 
 class RetrofitClient {
@@ -21,6 +19,9 @@ class RetrofitClient {
 
             val builder = OkHttpClient.Builder()
                 .addInterceptor(SigningInterceptor(consumer))
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
 
             if (BuildConfig.DEBUG) {
                 val loggingInterceptor = HttpLoggingInterceptor()
@@ -32,13 +33,8 @@ class RetrofitClient {
             return builder.build()
         }
 
-    private val moshi: Moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
-
     val apiService: EndpointInterface = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(okHttpClient)
         .build()
