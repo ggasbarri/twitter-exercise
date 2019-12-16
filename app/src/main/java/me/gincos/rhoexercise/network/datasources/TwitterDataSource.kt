@@ -13,6 +13,7 @@ import io.reactivex.functions.Consumer
 import me.gincos.rhoexercise.network.responses.Status
 import java.io.IOException
 import okio.BufferedSource
+import java.util.concurrent.TimeUnit
 
 
 class TwitterDataSource(private val retrofitClient: RetrofitClient) {
@@ -39,6 +40,7 @@ class TwitterDataSource(private val retrofitClient: RetrofitClient) {
             }
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext(Observable.empty())
+            .debounce(200L, TimeUnit.MILLISECONDS)
             .subscribe(consumer)
         return currentDisposable as Disposable
     }

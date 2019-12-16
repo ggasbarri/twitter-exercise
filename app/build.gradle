@@ -12,7 +12,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "me.gincos.rhoexercise"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -78,4 +78,8 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:2.2.16"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.0'
+
+    // Reactive Network
+    // Allows to easily handle Network Changes leveraging RxJava
+    implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.6'
 }

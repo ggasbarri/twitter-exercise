@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
 
         showInitDialog()
 
+        mainViewModel.initNetworkListening(this)
+
     }
 
     private fun showInitDialog() {

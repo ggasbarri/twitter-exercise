@@ -15,30 +15,10 @@ import java.util.*
 
 class SearchRepository(private val dataSource: TwitterDataSource) {
 
-    val searchResults = MutableLiveData<ArrayDeque<Status>>(ArrayDeque())
-
     val fetchingState: LiveData<FetchingState>
         get() = dataSource.fetchingState
 
-    fun search(query: String) {
-        val consumer = Consumer<Status> {
-            GlobalScope.launch {
-                val queueBeforeAdding = searchResults.value
-
-                queueBeforeAdding?.add(it)
-
-                searchResults.postValue(queueBeforeAdding)
-
-                delay(TWEET_LIFESPAN_SECS * 1000L)
-
-                val queueAfterAdding = searchResults.value
-
-                queueAfterAdding?.pop()
-
-                searchResults.postValue(queueAfterAdding)
-            }
-        }
-
+    fun search(consumer: Consumer<Status>, query: String) {
         dataSource.getStatus(consumer, query)
     }
 }
