@@ -1,3 +1,3 @@
-Twitter Exercise
+# Twitter Exercise
 
-Simple application that displays real-time tweets on a given query
+Android Native Application that displays real-time tweets as they are fetched.
